@@ -1,7 +1,8 @@
 # PixelPalette
+<img width="1200" alt="pixelpalette-combined" src="https://github.com/user-attachments/assets/64c2c307-866e-4e65-b5dc-e7f5862d9b1b" />
 
-A template website for experimenting with visual style. The page covers the
-components you meet on most real websites — nav, hero, buttons, typography,
+### A template website for experimenting with visual style. 
+The page covers the components you meet on most real websites — nav, hero, buttons, typography,
 forms, alerts, dialogs, tabs, tables, pricing, product cards, galleries,
 timelines, dashboards, newsletter, footer — and a **floating toolbar** at the
 bottom restyles the whole page live: fonts, color palette, corner radius, and
