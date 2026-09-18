@@ -1,0 +1,484 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   PixelPalette theme backbone.
+   Every color / font on the page flows through the CSS variables
+   below. The toolbar edits them live, so the whole site — including
+   the toolbar itself — re-styles instantly.
+------------------------------------------------------------------- */
+
+:root {
+  --bg: #fafaf9;
+  --surface: #ffffff;
+  --surface-2: #f5f5f4;
+  --text: #1c1917;
+  --muted: #78716c;
+  --border: #e7e5e4;
+  --primary: #4f46e5;
+  --primary-ink: #ffffff;
+  --accent: #0d9488;
+  --success: #16a34a;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --info: #0284c7;
+  --radius: 12px;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-code: "JetBrains Mono", ui-monospace, monospace;
+  --shadow: 0 12px 32px -12px rgb(0 0 0 / 0.22);
+  /* Emil-style expressive ease-out for all entrances */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* every clickable control shows the hand — disabled keeps its own */
+button,
+input[type="checkbox"],
+input[type="radio"] {
+  cursor: pointer;
+}
+button:disabled,
+button[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  transition: background-color 0.25s ease, color 0.25s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--primary);
+  color: var(--primary-ink);
+}
+
+/* ---------- type helpers ---------- */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
+}
+.font-body {
+  font-family: var(--font-body);
+}
+.font-code {
+  font-family: var(--font-code);
+}
+
+/* ---------- themed surfaces ---------- */
+.t-bg {
+  background: var(--bg);
+}
+.t-surface {
+  background: var(--surface);
+}
+.t-surface-2 {
+  background: var(--surface-2);
+}
+.t-text {
+  color: var(--text);
+}
+.t-muted {
+  color: var(--muted);
+}
+.t-border {
+  border-color: var(--border);
+}
+.t-primary {
+  background: var(--primary);
+  color: var(--primary-ink);
+}
+.t-primary-text {
+  color: var(--primary);
+}
+.t-accent-text {
+  color: var(--accent);
+}
+
+/* ---------- generic themed controls ---------- */
+.hover-tint:hover {
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+}
+.hover-primary:hover {
+  color: var(--primary);
+}
+.t-input {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: calc(var(--radius) * 0.66);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.t-input::placeholder {
+  color: var(--muted);
+}
+.t-input:focus {
+  border-color: var(--primary);
+  /* crisp solid ring — no soft halo */
+  box-shadow: 0 0 0 2px var(--primary);
+}
+.t-input[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+.t-input:disabled {
+  opacity: 0.55;
+}
+
+.t-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+/* floating toolbar treatment: primary ring so it never melts into the page */
+.t-dock {
+  background: var(--surface);
+  border: 0.75px solid var(--primary);
+  border-radius: var(--radius);
+}
+.t-chip {
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  border-radius: calc(var(--radius) * 0.5);
+}
+
+.t-btn {
+  border-radius: calc(var(--radius) * 0.66);
+  font-weight: 600;
+  transition: transform 0.08s ease, filter 0.15s ease, background-color 0.2s ease,
+    color 0.2s ease, border-color 0.2s ease;
+}
+.t-btn:active {
+  /* Emil tip #1: one press value everywhere — exactly 0.97 */
+  transform: scale(0.97);
+}
+.t-btn-primary {
+  background: var(--primary);
+  color: var(--primary-ink);
+}
+.t-btn-primary:hover {
+  filter: brightness(1.08);
+}
+.t-btn-accent {
+  background: var(--accent);
+  color: #fff;
+}
+.t-btn-accent:hover {
+  filter: brightness(1.08);
+}
+.t-btn-outline {
+  border: 1px solid var(--border);
+  color: var(--text);
+  background: transparent;
+}
+.t-btn-outline:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.t-btn-ghost {
+  color: var(--text);
+  background: transparent;
+}
+.t-btn-ghost:hover {
+  background: var(--surface-2);
+}
+.t-btn-danger {
+  background: var(--danger);
+  color: #fff;
+}
+.t-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ---------- custom range slider ---------- */
+input[type="range"].t-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--primary) 0%,
+    var(--primary) var(--fill, 50%),
+    var(--border) var(--fill, 50%),
+    var(--border) 100%
+  );
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"].t-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--primary);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.25);
+}
+input[type="range"].t-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--primary);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.25);
+}
+/* hue slider gets its own rainbow track */
+input[type="range"].t-hue {
+  background: linear-gradient(
+    to right,
+    #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%
+  );
+}
+
+/* ---------- switch ---------- */
+.t-switch {
+  width: 44px;
+  height: 24px;
+  border-radius: 999px;
+  background: var(--border);
+  position: relative;
+  transition: background-color 0.2s ease;
+  flex: none;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+.t-switch[data-on="true"] {
+  background: var(--primary);
+}
+.t-switch::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+  transition: transform 0.2s ease;
+}
+.t-switch[data-on="true"]::after {
+  transform: translateX(20px);
+}
+
+/* ---------- checkbox / radio ---------- */
+.t-check,
+.t-radio {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  display: inline-grid;
+  place-content: center;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.t-check {
+  border-radius: 5px;
+}
+.t-radio {
+  border-radius: 50%;
+}
+.t-check:checked,
+.t-radio:checked {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+.t-check:focus-visible,
+.t-radio:focus-visible,
+.t-switch:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.t-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.t-check:checked::after {
+  content: "";
+  width: 10px;
+  height: 6px;
+  border-left: 2px solid var(--primary-ink);
+  border-bottom: 2px solid var(--primary-ink);
+  transform: rotate(-45deg) translateY(-1px);
+}
+.t-radio:checked::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary-ink);
+}
+
+/* ---------- thin scrollbars inside panels ---------- */
+.t-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.t-scroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+.t-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---------- animations (after Emil Kowalski's practical tips) ---------- */
+@keyframes pp-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.pp-panel {
+  animation: pp-fade-up 0.18s var(--ease-out);
+}
+/* Emil tip #5: popovers scale in from their trigger, not from center */
+.pp-origin-bottom {
+  transform-origin: 50% 100%;
+}
+.pp-origin-top-left {
+  transform-origin: 0 0;
+}
+/* below-trigger dropdowns unfold out of the trigger's top edge */
+@keyframes pp-dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-2px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.pp-dropdown {
+  transform-origin: top center;
+  animation: pp-dropdown-in 120ms var(--ease-out);
+}
+@keyframes pp-fade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.pp-fade {
+  animation: pp-fade 0.18s var(--ease-out);
+}
+/* smooth height for disclosures (accordion) */
+.pp-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s var(--ease-out);
+}
+.pp-collapse[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+.pp-collapse > div {
+  overflow: hidden;
+  min-height: 0;
+}
+@keyframes pp-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.pp-spin {
+  /* Emil tip #6: a faster spinner feels like faster loading */
+  animation: pp-spin 0.75s linear infinite;
+}
+@keyframes pp-shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+.pp-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface-2) 25%,
+    var(--border) 50%,
+    var(--surface-2) 75%
+  );
+  background-size: 800px 100%;
+  animation: pp-shimmer 1.4s infinite linear;
+}
+@keyframes pp-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.pp-marquee {
+  animation: pp-marquee 28s linear infinite;
+  will-change: transform;
+}
+.pp-marquee:hover {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pp-marquee {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+  .pp-fade-x {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+@keyframes pp-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.pp-toast {
+  animation: pp-toast-in 0.22s var(--ease-out);
+}
+/* soft edge fade so carousel items never vanish abruptly */
+.pp-fade-x {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+}
